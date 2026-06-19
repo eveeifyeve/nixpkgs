@@ -52,6 +52,7 @@ stdenvNoCC.mkDerivation {
     {
       x86_64-linux = "sha256-p8jx9HDYG2q2nhBiBK8XDTYm9O0ptTqv8L+PrQ8oiy8=";
       aarch64-linux = "sha256-UsccQFaSSjhmv1+oF2FZcRG8xtWBCcPD+tizbdQ7SSI=";
+      aarch64-darwin = "";
     }
     .${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");

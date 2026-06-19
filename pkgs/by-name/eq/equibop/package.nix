@@ -62,9 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     pipewire
-    (lib.getLib stdenv.cc.cc)
   ];
 
   configurePhase = ''
@@ -177,9 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
       NotAShelf
       rexies
       PerchunPak
+      eveeifyeve # Darwin
     ];
     mainProgram = "equibop";
-    # I am not confident in my ability to support Darwin, please PR if this is important to you
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
   };
 })
