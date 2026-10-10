@@ -82,17 +82,25 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_${version}_linux_${
+        url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_${version}_${
           selectSystem {
-            aarch64-linux = "aarch64";
-            x86_64-linux = "x86_64";
+            aarch64-linux = "linux_aarch64";
+            x86_64-linux = "linux_x86_64";
+            aarch64-darwin = "macos_arm64";
           }
         }_v${revision}.tar.xz";
         hash = selectSystem {
           aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
           x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
+          aarch64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         };
       };
+
+      meta.platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
     }
   );
 in
@@ -131,31 +139,33 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     jansson
     libjack2
-    libv4l
     libxkbcommon
     libpthread-stubs
     libxdmcp
     qtbase
     qtsvg
     speex
-    wayland
     x264
-    libvlc
     mbedtls
     pciutils
     librist
     cjson
-    libva
     srt
-    qtwayland
     nlohmann_json
     websocketpp
     asio
     libdatachannel
-    libvpl
     qrcodegencpp
     uthash
     nv-codec-headers-12
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    libvpl
+    libva
+    libvlc
+    libv4l
+    wayland
+    qtwayland
   ]
   ++ optionals scriptingSupport [
     luajit
@@ -258,12 +268,14 @@ stdenv.mkDerivation (finalAttrs: {
       jb55
       materus
       fpletz
+      eveeifyeve # Darwin
     ];
     license = with lib.licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     mainProgram = "obs";
   };
