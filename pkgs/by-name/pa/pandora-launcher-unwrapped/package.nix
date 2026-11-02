@@ -92,6 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   });
 
   postInstall = ''
+    install -Dm644 package/flatpak/com.moulberry.PandoraLauncher.metainfo.xml -t $out/share/metainfo
+
     for size in 16 24 32 48 64 128 256; do
       geometry="$size"x"$size"
       mkdir -p "$out/share/icons/hicolor/$geometry/apps"
